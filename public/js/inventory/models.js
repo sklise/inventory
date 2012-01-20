@@ -11,14 +11,6 @@
       Vinyl.__super__.constructor.apply(this, arguments);
     }
 
-    Vinyl.prototype.url = function() {
-      if (this.id) {
-        return "/vinyls/" + this.id;
-      } else {
-        return "/vinyls";
-      }
-    };
-
     return Vinyl;
 
   })(Backbone.Model);

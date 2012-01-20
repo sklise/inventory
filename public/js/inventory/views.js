@@ -74,9 +74,14 @@
 
       VinylsView.prototype.tagName = 'table';
 
+      VinylsView.prototype.initialize = function(options) {
+        return this.collection.bind('add', this.render, this);
+      };
+
       VinylsView.prototype.render = function() {
         var vinyl, vinylView, _i, _len, _ref;
         $(this.el).empty();
+        $(this.el).append(this.collection.models.length);
         _ref = this.collection.models;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           vinyl = _ref[_i];
@@ -138,18 +143,26 @@
       NewVinylView.prototype.saveOnEnter = function(event) {
         var newAttributes;
         if (event.keyCode === 13) {
-          console.log("hi");
-          console.log($('#new-vinyl').find('[name="title"]').val());
+          event.preventDefault();
           newAttributes = {
-            title: "I See A Darkness"
+            title: $('#new-vinyl').find('[name="title"]').val(),
+            year: $('#new-vinyl').find('[name="year"]').val(),
+            size: $('#new-vinyl').find('[name="size"]').val(),
+            records: $('#new-vinyl').find('[name="records"]').val()
           };
-          console.log(newAttributes);
-          console.log(this.collection);
-          this["new"] = new app.Vinyl({
-            title: "I See A Darkness"
-          });
-          return this["new"].save();
+          if (this.collection.create(newAttributes)) {
+            this.emptyFields();
+            return this.focus();
+          }
         }
+      };
+
+      NewVinylView.prototype.emptyFields = function() {
+        $('#new-vinyl').find('[name="title"]').val("");
+        $('#new-vinyl').find('[name="year"]').val("");
+        $('#new-vinyl').find('[name="size"]').val("12");
+        $('#new-vinyl').find('[name="records"]').val("1");
+        return true;
       };
 
       NewVinylView.prototype.focus = function() {

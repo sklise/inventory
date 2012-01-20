@@ -26,8 +26,11 @@ jQuery ->
 
   class VinylsView extends Backbone.View
     tagName: 'table'
+    initialize: (options) ->
+      @collection.bind 'add', @render, @
     render: ->
       $(@el).empty()
+      $(@el).append @collection.models.length
       for vinyl in @collection.models
         console.log "vinyl",vinyl
         vinylView = new VinylView model: vinyl
@@ -52,14 +55,21 @@ jQuery ->
       @
     saveOnEnter: (event) ->
       if (event.keyCode is 13) # ENTER
-        console.log "hi"
-        console.log $('#new-vinyl').find('[name="title"]').val()
-        # event.preventDefault()
-        newAttributes = {title: "I See A Darkness"}
-        console.log newAttributes
-        console.log @collection
-        @new = new app.Vinyl({title: "I See A Darkness"})
-        @new.save()
+        event.preventDefault()
+        newAttributes = {
+          title: $('#new-vinyl').find('[name="title"]').val()
+          year: $('#new-vinyl').find('[name="year"]').val()
+          size: $('#new-vinyl').find('[name="size"]').val()
+          records: $('#new-vinyl').find('[name="records"]').val()
+        }
+        if @collection.create(newAttributes)
+          @emptyFields()
+          @focus()
+    emptyFields: ->
+      $('#new-vinyl .vinyl-form').val('')
+      $('#new-vinyl').find('[name="size"]').val("12")
+      $('#new-vinyl').find('[name="records"]').val("1")
+      true
     focus: ->
       $('#new-vinyl').find('[name="title"]').focus()
       
