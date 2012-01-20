@@ -145,10 +145,18 @@
         if (event.keyCode === 13) {
           event.preventDefault();
           newAttributes = {
-            title: $('#new-vinyl').find('[name="title"]').val(),
-            year: $('#new-vinyl').find('[name="year"]').val(),
-            size: $('#new-vinyl').find('[name="size"]').val(),
-            records: $('#new-vinyl').find('[name="records"]').val()
+            vinyl: {
+              title: $('#new-vinyl').find('[name="title"]').val(),
+              year: $('#new-vinyl').find('[name="year"]').val(),
+              size: $('#new-vinyl').find('[name="size"]').val(),
+              records: $('#new-vinyl').find('[name="records"]').val()
+            },
+            author: {
+              name: $('[name="author"]').val()
+            },
+            label: {
+              name: $('[name="label"]').val()
+            }
           };
           if (this.collection.create(newAttributes)) {
             this.emptyFields();
@@ -158,8 +166,7 @@
       };
 
       NewVinylView.prototype.emptyFields = function() {
-        $('#new-vinyl').find('[name="title"]').val("");
-        $('#new-vinyl').find('[name="year"]').val("");
+        $('.vinyl-form').val('');
         $('#new-vinyl').find('[name="size"]').val("12");
         $('#new-vinyl').find('[name="records"]').val("1");
         return true;

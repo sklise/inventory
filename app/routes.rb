@@ -4,15 +4,20 @@ end
 
 get '/vinyls' do
   content_type :json
-  Vinyl.all.to_json
+  Vinyl.all.to_json(:include => :author)
 end
 
 post '/vinyls/?' do
   content_type :json
   attributes = JSON.parse request.body.read
 
-  @vinyl = Vinyl.create(attributes)
-  @vinyl.to_json
+  # raise attributes.inspect
+
+  @vinyl = Vinyl.new(attributes["vinyl"])
+  @vinyl.author = Author.find_or_create_by_name(attributes["author"]["name"])
+  if @vinyl.save
+    @vinyl.to_json
+  end
 end
 
 get '/vinyls/:id' do

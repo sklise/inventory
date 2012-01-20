@@ -2,7 +2,7 @@
 @import 'modular-scale';
 
 // Fonts
-$main-font: 'Berthold Akzidenz Grotesk BE';
+$main-font: 'Berthold Akzidenz Grotesk BE','Helvetica Neue';
 $header-font: 'Colaborate-Medium';
 $header-font-light: 'Colaborate-Light';
 $base-size: 14px 300px;
@@ -73,4 +73,22 @@ header {
   ul li{
     display: inline;
   }
+}
+
+#new-vinyl-template {
+}
+
+.vinyl-form {
+  clear: both;
+  display: block;
+  margin: 0.25em auto 0.35em;
+  width: 80%;
+}
+
+input {
+  border: 1px $color-third dotted;
+  font-family: inherit;
+  font-size: inherit;
+/*    line-height: inherit;*/
+  padding: 0em 0.4em 0em;
 }

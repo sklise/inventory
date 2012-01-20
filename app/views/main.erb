@@ -1,26 +1,31 @@
 <div id="wrap"></div>
 
 <script type="text/template" id="vinyl-template">
-<td>
-  {{title}}
-</td>
-<td>
-  {{year}}
-</td>
+  <td>
+    {{title}}
+  </td>
+  <td>
+    {{author.name}}
+  </td>
+  <td>
+    {{year}}
+  </td>
 </script>
 
 <script type="text/template" id="new-vinyl-template">
   <h6>New Vinyl</h6>
-  <p>Title: <input class="vinyl-form" type="text" name="title"></p>
-  <p>Year: <input class="vinyl-form" type="number" min="1900" max="2012"></p>
-  <p>Size:
+  <input class="vinyl-form" type="text" name="title" placeholder="Title">
+  <input class="vinyl-form" type="text" name="author" placeholder="Band">
+  <input class="vinyl-form" type="text" name="label" placeholder="Label">
+  <input class="vinyl-form" type="number" min="1900" max="{{ (new Date()).getFullYear() }}" name="year" value="{{ (new Date()).getFullYear() }}">
+  <p>7"/10"/12":
     <select name="size">
       <option>12</option>
       <option>10</option>
       <option>7</option>
     </select>
   </p>
-  <p>Records: <input type="number" value="1"/></p>
+  <p>Records: <input type="records" value="1"></p>
 </script>
 
 <script type="text/template" id="menu-template">

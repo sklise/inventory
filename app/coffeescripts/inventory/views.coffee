@@ -57,16 +57,24 @@ jQuery ->
       if (event.keyCode is 13) # ENTER
         event.preventDefault()
         newAttributes = {
-          title: $('#new-vinyl').find('[name="title"]').val()
-          year: $('#new-vinyl').find('[name="year"]').val()
-          size: $('#new-vinyl').find('[name="size"]').val()
-          records: $('#new-vinyl').find('[name="records"]').val()
+          vinyl: {
+            title: $('#new-vinyl').find('[name="title"]').val()
+            year: $('#new-vinyl').find('[name="year"]').val()
+            size: $('#new-vinyl').find('[name="size"]').val()
+            records: $('#new-vinyl').find('[name="records"]').val()
+          }
+          author: {
+            name: $('[name="author"]').val()
+          }
+          label: {
+            name: $('[name="label"]').val()
+          }
         }
         if @collection.create(newAttributes)
           @emptyFields()
           @focus()
     emptyFields: ->
-      $('#new-vinyl .vinyl-form').val('')
+      $('.vinyl-form').val('')
       $('#new-vinyl').find('[name="size"]').val("12")
       $('#new-vinyl').find('[name="records"]').val("1")
       true
