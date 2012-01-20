@@ -1,0 +1,32 @@
+<div id="wrap"></div>
+
+<script type="text/template" id="vinyl-template">
+<td>
+  {{title}}
+</td>
+<td>
+  {{year}}
+</td>
+</script>
+
+<script type="text/template" id="new-vinyl-template">
+  <h6>New Vinyl</h6>
+  <p>Title: <input class="vinyl-form" type="text" name="title"></p>
+  <p>Year: <input class="vinyl-form" type="number" min="1900" max="2012"></p>
+  <p>Size:
+    <select name="size">
+      <option>12</option>
+      <option>10</option>
+      <option>7</option>
+    </select>
+  </p>
+  <p>Records: <input type="number" value="1"/></p>
+</script>
+
+<script type="text/template" id="menu-template">
+  <h1>Media Inventory</h1>
+  <ul>
+    <li>Vinyls</li>
+    <li>Books</li>
+  </ul>
+</script>
