@@ -8,8 +8,7 @@ get '/vinyls' do
 end
 
 post '/vinyls/?' do
-  # content_type :json
-  raise params.inspect
+  content_type :json
   @vinyl = Vinyl.create(title: params[:title])
   # @vinyl.to_json
 end
