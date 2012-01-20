@@ -9,18 +9,22 @@ end
 
 post '/vinyls/?' do
   content_type :json
-  @vinyl = Vinyl.create(title: params[:title])
-  # @vinyl.to_json
+  attributes = JSON.parse request.body.read
+
+  @vinyl = Vinyl.create(attributes)
+  @vinyl.to_json
 end
 
 get '/vinyls/:id' do
   content_type :json
-  Vinyl.where("id = ?", params[:id]).first.to_json
+  attributes = JSON.parse request.body.read
+  Vinyl.where("id = ?", attributes[:id]).first.to_json
 end
 
 put '/vinyls/:id' do
-  @vinyl = Vinyl.where("id = ?", params[:id]).first
-  @vinyl.update_attributes(params)
+  attributes = JSON.parse request.body.read
+  @vinyl = Vinyl.where("id = ?", attributes[:id]).first
+  @vinyl.update_attributes(attributes)
   @vinyl.save
   @vinyl.to_json
 end
