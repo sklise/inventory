@@ -4,7 +4,7 @@ end
 
 get '/vinyls' do
   content_type :json
-  Vinyl.all.to_json(:include => :author)
+  Vinyl.all.to_json(:include => [:author, :label])
 end
 
 post '/vinyls/?' do
@@ -15,6 +15,7 @@ post '/vinyls/?' do
 
   @vinyl = Vinyl.new(attributes["vinyl"])
   @vinyl.author = Author.find_or_create_by_name(attributes["author"]["name"])
+  @vinyl.label = Label.find_or_create_by_name(attributes["label"]["name"])
   if @vinyl.save
     @vinyl.to_json
   end
