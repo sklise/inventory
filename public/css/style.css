@@ -49,7 +49,7 @@ body {
 
 #wrap {
   margin: 0 auto;
-  width: 40em; }
+  width: 50em; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Colaborate-Medium";
@@ -89,15 +89,40 @@ h6 {
 header ul li {
   display: inline; }
 
-.vinyl-form {
+.vinyl {
   clear: both;
   display: block;
-  margin: 0.25em auto 0.35em;
-  width: 80%; }
+  font-size: 17px;
+  overflow-y: auto;
+  position: relative; }
+  .vinyl .record,
+  .vinyl .year {
+    font-family: "Helvetica Neue";
+    font-weight: 200; }
+  .vinyl div {
+    display: inline;
+    float: left; }
+  .vinyl .title {
+    width: 40%; }
+  .vinyl .author {
+    width: 30%; }
+  .vinyl .label {
+    width: 15%; }
+  .vinyl .year {
+    font-family: "Helvetica Neue";
+    font-weight: 200;
+    width: 6%; }
+  .vinyl .record {
+    width: 9%; }
 
-input {
+.vinyl-form {
+  display: block; }
+
+input[type="text"],
+input[type="number"] {
   border: 1px #4975ad dotted;
   font-family: inherit;
   font-size: inherit;
-  /*    line-height: inherit;*/
-  padding: 0em 0.4em 0em; }
+  line-height: inherit;
+  padding: 0 5% 0 0;
+  width: 90%; }

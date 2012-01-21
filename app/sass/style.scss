@@ -5,6 +5,8 @@
 $main-font: 'Berthold Akzidenz Grotesk BE','Helvetica Neue';
 $header-font: 'Colaborate-Medium';
 $header-font-light: 'Colaborate-Light';
+$accent-font: 'Helvetica Neue';
+
 $base-size: 14px 300px;
 
 // Colors
@@ -18,13 +20,13 @@ $wrap: rgba(250,252,255,1);
 body {
   background-color: $color-background;
   font-size: modular-scale(2, $base-size, $golden);
-  @include modular-scale(line-height, 3, $base-size, $golden);
+  line-height: modular-scale(3, $base-size, $golden);
   font-family: $main-font;
 }
 
 #wrap {
   margin: 0 auto;
-  width: 40em;
+  width: 50em;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -78,17 +80,57 @@ header {
 #new-vinyl-template {
 }
 
-.vinyl-form {
+.vinyl {
   clear: both;
   display: block;
-  margin: 0.25em auto 0.35em;
-  width: 80%;
+  font-size: modular-scale(1, $base-size, $golden);
+  overflow-y: auto;
+  position: relative;
+
+  .record,
+  .year {
+    font-family: $accent-font;
+    font-weight: 200;
+  }
+
+  div {
+    display: inline;
+    float: left;
+  }
+
+  .title {
+    width: 40%;
+  }
+
+  .author {
+    width: 30%;
+  }
+
+  .label {
+    width: 15%;
+  }
+
+  .year {
+    font-family: $accent-font;
+    font-weight: 200;
+    width: 6%;
+  }
+  
+  .record {
+    width: 9%;
+  }
 }
 
-input {
+.vinyl-form {
+  display: block;
+}
+
+input[type="text"],
+input[type="number"] {
   border: 1px $color-third dotted;
   font-family: inherit;
   font-size: inherit;
-/*    line-height: inherit;*/
-  padding: 0em 0.4em 0em;
+  line-height: inherit;
+  padding: 0 5% 0 0;
+  width: 90%;
 }
