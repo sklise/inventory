@@ -9,8 +9,8 @@ jQuery ->
       @collection.bind 'reset', @render, @
       @subviews = [
         new MenuView      collection: @collection
-        new VinylsView    collection: @collection
         new NewVinylView  collection: @collection
+        new VinylsView    collection: @collection
         ]
     render: ->
       $(@el).empty()
@@ -25,20 +25,20 @@ jQuery ->
       @
 
   class VinylsView extends Backbone.View
-    tagName: 'table'
+    tagName: 'ul'
     initialize: (options) ->
       @collection.bind 'add', @render, @
     render: ->
       $(@el).empty()
       $(@el).append @collection.models.length
-      for vinyl in @collection.models
-        console.log "vinyl",vinyl
+      for vinyl in @collection.byAuthor()
         vinylView = new VinylView model: vinyl
         $(@el).append vinylView.render().el
       @
 
   class VinylView extends Backbone.View
-    tagName: 'tr'
+    tagName: 'li'
+    className: 'vinyl'
     template: _.template($('#vinyl-template').html())
     render: ->
       $(@el).html @template(@model.toJSON())
@@ -60,8 +60,8 @@ jQuery ->
           vinyl: {
             title: $('#new-vinyl').find('[name="title"]').val()
             year: $('#new-vinyl').find('[name="year"]').val()
-            size: $('#new-vinyl').find('[name="size"]').val()
-            records: $('#new-vinyl').find('[name="records"]').val()
+            size: parseInt $('#new-vinyl').find('[name="size"]').val()
+            records: parseInt $('#new-vinyl').find('[name="records"]').val()
           }
           author: {
             name: $('[name="author"]').val()

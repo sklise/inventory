@@ -11,6 +11,14 @@
       Vinyl.__super__.constructor.apply(this, arguments);
     }
 
+    Vinyl.prototype.initialize = function(attributes, options) {
+      if (!attributes.label) {
+        return this.attributes.label = {
+          name: "&nbsp;"
+        };
+      }
+    };
+
     return Vinyl;
 
   })(Backbone.Model);

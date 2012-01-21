@@ -22,9 +22,9 @@
         return this.subviews = [
           new MenuView({
             collection: this.collection
-          }), new VinylsView({
-            collection: this.collection
           }), new NewVinylView({
+            collection: this.collection
+          }), new VinylsView({
             collection: this.collection
           })
         ];
@@ -72,7 +72,7 @@
         VinylsView.__super__.constructor.apply(this, arguments);
       }
 
-      VinylsView.prototype.tagName = 'table';
+      VinylsView.prototype.tagName = 'ul';
 
       VinylsView.prototype.initialize = function(options) {
         return this.collection.bind('add', this.render, this);
@@ -82,10 +82,9 @@
         var vinyl, vinylView, _i, _len, _ref;
         $(this.el).empty();
         $(this.el).append(this.collection.models.length);
-        _ref = this.collection.models;
+        _ref = this.collection.byAuthor();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           vinyl = _ref[_i];
-          console.log("vinyl", vinyl);
           vinylView = new VinylView({
             model: vinyl
           });
@@ -105,7 +104,9 @@
         VinylView.__super__.constructor.apply(this, arguments);
       }
 
-      VinylView.prototype.tagName = 'tr';
+      VinylView.prototype.tagName = 'li';
+
+      VinylView.prototype.className = 'vinyl';
 
       VinylView.prototype.template = _.template($('#vinyl-template').html());
 
@@ -148,8 +149,8 @@
             vinyl: {
               title: $('#new-vinyl').find('[name="title"]').val(),
               year: $('#new-vinyl').find('[name="year"]').val(),
-              size: $('#new-vinyl').find('[name="size"]').val(),
-              records: $('#new-vinyl').find('[name="records"]').val()
+              size: parseInt($('#new-vinyl').find('[name="size"]').val()),
+              records: parseInt($('#new-vinyl').find('[name="records"]').val())
             },
             author: {
               name: $('[name="author"]').val()

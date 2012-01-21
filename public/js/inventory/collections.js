@@ -15,6 +15,18 @@
 
     Vinyls.prototype.url = '/vinyls';
 
+    Vinyls.prototype.byAuthor = function() {
+      return _.sortBy(this.models, function(vinyl) {
+        return vinyl.get('author').name;
+      });
+    };
+
+    Vinyls.prototype.byTitle = function() {
+      return _.sortBy(this.models, function(task) {
+        return task.get('title');
+      });
+    };
+
     return Vinyls;
 
   })(Backbone.Collection);
