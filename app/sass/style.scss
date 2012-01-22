@@ -84,7 +84,7 @@ header {
   clear: both;
   display: block;
   font-size: modular-scale(1, $base-size, $golden);
-  overflow-y: auto;
+/*  overflow-y: auto;*/
   position: relative;
 
   .record,
@@ -113,12 +113,22 @@ header {
   .year {
     font-family: $accent-font;
     font-weight: 200;
-    width: 6%;
+    width: 7%;
   }
   
   .record {
-    width: 9%;
+    width: 8%;
   }
+
+  .icons {
+    display: none;
+    margin-right: -100%;
+  }
+  
+  &:hover .icons {
+    display: block;
+  }
+  
 }
 
 .vinyl-form {
@@ -133,4 +143,8 @@ input[type="number"] {
   line-height: inherit;
   padding: 0 5% 0 0;
   width: 90%;
+}
+
+.icons {
+  font-family: 'Pictos';
 }

@@ -75,7 +75,9 @@
       VinylsView.prototype.tagName = 'ul';
 
       VinylsView.prototype.initialize = function(options) {
-        return this.collection.bind('add', this.render, this);
+        this.collection.bind('add', this.render, this);
+        this.collection.bind('remove', this.render, this);
+        return this.collection.bind('change', this.render, this);
       };
 
       VinylsView.prototype.render = function() {
@@ -110,9 +112,36 @@
 
       VinylView.prototype.template = _.template($('#vinyl-template').html());
 
+      VinylView.prototype.editTemplate = _.template($('#vinyl-edit-template').html());
+
+      VinylView.prototype.events = {
+        'click .delete': 'destroy',
+        'click .edit': 'edit',
+        'keypress .vinyl-edit-form': 'saveOnEnter'
+      };
+
       VinylView.prototype.render = function() {
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
+      };
+
+      VinylView.prototype.edit = function() {
+        $(this.el).html(this.editTemplate(this.model.toJSON()));
+        console.log(this.model.attributes);
+        return this;
+      };
+
+      VinylView.prototype.destroy = function() {
+        return this.model.destroy();
+      };
+
+      VinylView.prototype.saveOnEnter = function() {
+        if (event.keyCode === 13) {
+          this.model.save({
+            title: this.$('.title input').val()
+          });
+          return this.render();
+        }
       };
 
       return VinylView;

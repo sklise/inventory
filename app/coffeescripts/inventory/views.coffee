@@ -28,6 +28,8 @@ jQuery ->
     tagName: 'ul'
     initialize: (options) ->
       @collection.bind 'add', @render, @
+      @collection.bind 'remove', @render, @
+      @collection.bind 'change', @render, @
     render: ->
       $(@el).empty()
       $(@el).append @collection.models.length
@@ -40,9 +42,24 @@ jQuery ->
     tagName: 'li'
     className: 'vinyl'
     template: _.template($('#vinyl-template').html())
+    editTemplate: _.template($('#vinyl-edit-template').html())
+    events:
+      'click .delete': 'destroy'
+      'click .edit'  : 'edit'
+      'keypress .vinyl-edit-form' : 'saveOnEnter'
     render: ->
       $(@el).html @template(@model.toJSON())
       @
+    edit: ->
+      $(@el).html @editTemplate(@model.toJSON())
+      console.log(@model.attributes)
+      @
+    destroy: ->
+      @model.destroy()
+    saveOnEnter: ->
+      if(event.keyCode is 13)
+        @model.save title:@$('.title input').val()
+        @render()
 
   class NewVinylView extends Backbone.View
     id: 'new-vinyl'
@@ -84,4 +101,3 @@ jQuery ->
 
   @app = window.app ? {}
   @app.AppView = AppView
-  

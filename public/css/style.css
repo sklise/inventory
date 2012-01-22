@@ -93,7 +93,7 @@ header ul li {
   clear: both;
   display: block;
   font-size: 17px;
-  overflow-y: auto;
+  /*  overflow-y: auto;*/
   position: relative; }
   .vinyl .record,
   .vinyl .year {
@@ -111,9 +111,14 @@ header ul li {
   .vinyl .year {
     font-family: "Helvetica Neue";
     font-weight: 200;
-    width: 6%; }
+    width: 7%; }
   .vinyl .record {
-    width: 9%; }
+    width: 8%; }
+  .vinyl .icons {
+    display: none;
+    margin-right: -100%; }
+  .vinyl:hover .icons {
+    display: block; }
 
 .vinyl-form {
   display: block; }
@@ -126,3 +131,6 @@ input[type="number"] {
   line-height: inherit;
   padding: 0 5% 0 0;
   width: 90%; }
+
+.icons {
+  font-family: 'Pictos'; }

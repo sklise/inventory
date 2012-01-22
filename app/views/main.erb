@@ -16,6 +16,37 @@
   <div class="record">
     {{ size }}x{{ records }}
   </div>
+  <div class="icons">
+    <span class="edit">p</span>
+    <span class="delete">#</span>
+  </div>
+</script>
+
+<script type="text/template" id="vinyl-edit-template">
+  <div class="title">
+    <input class="vinyl-edit-form" type="text" name="title" placeholder="Title" value="{{ title }}">
+  </div>
+  <div class="author">
+    <input class="vinyl-edit-form" type="text" name="author" placeholder="Band" value="{{ author.name }}">
+  </div>
+  <div class="label">
+    <input class="vinyl-edit-form" type="text" name="label" placeholder="Label" value="{{ label.name }}">
+  </div>
+  <div class="year">
+    <input class="vinyl-edit-form" type="number" min="1900" max="{{ (new Date()).getFullYear() }}" name="year" value="{{ year }}">
+  </div>
+  <div class="record">
+    <select name="size">
+      <option>12</option>
+      <option>10</option>
+      <option>7</option>
+    </select>
+  x <input class="vinyl-edit-form" type="number" name="records" min="1" value="{{ records }}"></p>
+  </div>
+  <div class="icons">
+    <span class="edit">p</span>
+    <span class="delete">#</span>
+  </div>
 </script>
 
 <script type="text/template" id="new-vinyl-template">
@@ -41,7 +72,7 @@
       </select>
     x <input class="vinyl-form" type="number" name="records" min="1" value="1"></p>
     </div>
-  </dvi>
+  </div>
 </script>
 
 <script type="text/template" id="menu-template">

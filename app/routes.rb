@@ -34,3 +34,10 @@ put '/vinyls/:id' do
   @vinyl.save
   @vinyl.to_json
 end
+
+delete '/vinyls/:id' do |id|
+  content_type :json
+  @vinyl = Vinyl.find(params[:id])
+  @vinyl.destroy
+  {:head => :ok}.to_json
+end
