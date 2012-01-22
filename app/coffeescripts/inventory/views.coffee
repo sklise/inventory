@@ -52,13 +52,24 @@ jQuery ->
       @
     edit: ->
       $(@el).html @editTemplate(@model.toJSON())
-      console.log(@model.attributes)
+      @$('.vinyl-edit-form').eq(0).focus()
       @
     destroy: ->
       @model.destroy()
     saveOnEnter: ->
       if(event.keyCode is 13)
-        @model.save title:@$('.title input').val()
+        @model.save({
+          author:{
+            name:@$('.author input').val().trim().trim()
+            id:@model.get('author').id
+          }
+          label:{
+            name:@$('.label input').val().trim().trim()
+          }
+          title: @$('.title input').val().trim().trim()
+          records: @$('.record input').val().trim().trim()
+          year: @$('.year input').val().trim().trim()
+        })
         @render()
 
   class NewVinylView extends Backbone.View
@@ -75,16 +86,16 @@ jQuery ->
         event.preventDefault()
         newAttributes = {
           vinyl: {
-            title: $('#new-vinyl').find('[name="title"]').val()
-            year: $('#new-vinyl').find('[name="year"]').val()
-            size: parseInt $('#new-vinyl').find('[name="size"]').val()
-            records: parseInt $('#new-vinyl').find('[name="records"]').val()
+            title: $('#new-vinyl').find('[name="title"]').val().trim()
+            year: $('#new-vinyl').find('[name="year"]').val().trim()
+            size: parseInt $('#new-vinyl').find('[name="size"]').val().trim()
+            records: parseInt $('#new-vinyl').find('[name="records"]').val().trim()
           }
           author: {
-            name: $('[name="author"]').val()
+            name: $('[name="author"]').val().trim()
           }
           label: {
-            name: $('[name="label"]').val()
+            name: $('[name="label"]').val().trim()
           }
         }
         if @collection.create(newAttributes)

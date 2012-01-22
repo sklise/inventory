@@ -134,3 +134,5 @@ input[type="number"] {
 
 .icons {
   font-family: 'Pictos'; }
+  .icons span:hover {
+    cursor: pointer; }

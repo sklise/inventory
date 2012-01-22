@@ -127,7 +127,7 @@
 
       VinylView.prototype.edit = function() {
         $(this.el).html(this.editTemplate(this.model.toJSON()));
-        console.log(this.model.attributes);
+        this.$('.vinyl-edit-form').eq(0).focus();
         return this;
       };
 
@@ -138,7 +138,16 @@
       VinylView.prototype.saveOnEnter = function() {
         if (event.keyCode === 13) {
           this.model.save({
-            title: this.$('.title input').val()
+            author: {
+              name: this.$('.author input').val().trim().trim(),
+              id: this.model.get('author').id
+            },
+            label: {
+              name: this.$('.label input').val().trim().trim()
+            },
+            title: this.$('.title input').val().trim().trim(),
+            records: this.$('.record input').val().trim().trim(),
+            year: this.$('.year input').val().trim().trim()
           });
           return this.render();
         }
@@ -176,16 +185,16 @@
           event.preventDefault();
           newAttributes = {
             vinyl: {
-              title: $('#new-vinyl').find('[name="title"]').val(),
-              year: $('#new-vinyl').find('[name="year"]').val(),
-              size: parseInt($('#new-vinyl').find('[name="size"]').val()),
-              records: parseInt($('#new-vinyl').find('[name="records"]').val())
+              title: $('#new-vinyl').find('[name="title"]').val().trim(),
+              year: $('#new-vinyl').find('[name="year"]').val().trim(),
+              size: parseInt($('#new-vinyl').find('[name="size"]').val().trim()),
+              records: parseInt($('#new-vinyl').find('[name="records"]').val().trim())
             },
             author: {
-              name: $('[name="author"]').val()
+              name: $('[name="author"]').val().trim()
             },
             label: {
-              name: $('[name="label"]').val()
+              name: $('[name="label"]').val().trim()
             }
           };
           if (this.collection.create(newAttributes)) {
