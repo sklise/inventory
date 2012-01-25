@@ -1,5 +1,5 @@
 source :rubygems
-gem 'sinatra', "< 1.3"
+gem 'sinatra'
 gem 'sass'
 gem 'json'
 gem 'activerecord'
