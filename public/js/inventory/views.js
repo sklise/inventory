@@ -56,8 +56,12 @@
 
       MenuView.prototype.template = _.template($('#menu-template').html());
 
+      MenuView.prototype.initialize = function(options) {
+        return this.collection.bind('add', this.render, this);
+      };
+
       MenuView.prototype.render = function() {
-        $(this.el).html(this.template());
+        $(this.el).html(this.template(this.collection.models));
         return this;
       };
 
@@ -83,7 +87,6 @@
       VinylsView.prototype.render = function() {
         var vinyl, vinylView, _i, _len, _ref;
         $(this.el).empty();
-        $(this.el).append(this.collection.models.length);
         _ref = this.collection.byAuthor();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           vinyl = _ref[_i];

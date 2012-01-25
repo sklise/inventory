@@ -20,8 +20,10 @@ jQuery ->
   class MenuView extends Backbone.View
     tagName: 'header'
     template: _.template($('#menu-template').html())
+    initialize: (options) ->
+      @collection.bind 'add', @render, @
     render: ->
-      $(@el).html @template()
+      $(@el).html @template( @collection.models )
       @
 
   class VinylsView extends Backbone.View
@@ -32,7 +34,6 @@ jQuery ->
       @collection.bind 'change', @render, @
     render: ->
       $(@el).empty()
-      $(@el).append @collection.models.length
       for vinyl in @collection.byAuthor()
         vinylView = new VinylView model: vinyl
         $(@el).append vinylView.render().el
