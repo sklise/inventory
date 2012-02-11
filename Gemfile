@@ -2,10 +2,8 @@ source :rubygems
 gem 'sinatra'
 gem 'sass'
 gem 'json'
-gem 'activerecord'
+gem 'activerecord', "3.1.0"
 gem 'sinatra-activerecord', :require => 'sinatra/activerecord'
-
-gem 'activemodel', "3.2.0"
 
 group :development do
   gem 'sqlite3'
