@@ -2,42 +2,48 @@ package main
 
 import (
   "fmt"
-  "github.com/gorilla/mux"
+  "github.com/julienschmidt/httprouter"
   "log"
   "net/http"
   "time"
 )
 
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
+func HomeHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
   fmt.Println("GET /home")
   fmt.Fprintf(w, "home")
 }
 
-func ThingsIndexHandler(w http.ResponseWriter, r *http.Request) {
+func ThingsIndexHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
   fmt.Fprintf(w, "All things")
 }
 
-func ThingsShowHandler(w http.ResponseWriter, r *http.Request) {
-  vars := mux.Vars(r)
-  fmt.Fprintf(w, "%s", vars)
+func ThingsShowHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  vars := ps
+
+  // Due to how httprouter works, we need to forward to "new" from within the show route
+  if ps.ByName("id") == "new" {
+    ThingsNewHandler(w,r,ps)
+  } else {
+    fmt.Fprintf(w, "%s", vars)
+  }
 }
 
-func ThingsNewHandler(w http.ResponseWriter, r *http.Request) {
+func ThingsNewHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
   fmt.Fprintf(w, "new")
 }
 
-func ThingsCreateHandler(w http.ResponseWriter, r *http.Request) {
-  vars := mux.Vars(r)
+func ThingsCreateHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  vars := ps
   fmt.Fprintf(w, "%s", vars)
 }
 
-func ThingsDeleteHandler(w http.ResponseWriter, r *http.Request) {
-  vars := mux.Vars(r)
+func ThingsDeleteHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  vars := ps
   fmt.Fprintf(w, "ID: %v", vars)
 }
 
-func ThingsUpdateHandler(w http.ResponseWriter, r *http.Request) {
-  vars := mux.Vars(r)
+func ThingsUpdateHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  vars := ps
   fmt.Fprintf(w, "%s", vars)
 }
 
@@ -53,15 +59,16 @@ func loggingHandler(next http.Handler) http.Handler {
 }
 
 func main() {
-  r := mux.NewRouter()
+  r := httprouter.New()
 
-  r.HandleFunc("/", HomeHandler).Methods("GET")
-  r.HandleFunc("/things", ThingsIndexHandler).Methods("GET")
-  r.HandleFunc("/things", ThingsCreateHandler).Methods("POST")
-  r.HandleFunc("/things/new", ThingsNewHandler).Methods("GET")
-  r.HandleFunc("/things/{id}", ThingsShowHandler).Methods("GET")
-  r.HandleFunc("/things/{id}", ThingsUpdateHandler).Methods("PUT")
-  r.HandleFunc("/things/{id}", ThingsDeleteHandler).Methods("DELETE")
+  r.GET("/", HomeHandler)
+
+  r.GET("/things", ThingsIndexHandler)
+  r.POST("/things", ThingsCreateHandler)
+  r.GET("/things/:id", ThingsShowHandler)
+  r.PUT("/things/:id", ThingsUpdateHandler)
+  r.DELETE("/things/:id", ThingsDeleteHandler)
+
   http.Handle("/", r)
   http.ListenAndServe(":8080", nil)
 }
