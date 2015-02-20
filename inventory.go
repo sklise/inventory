@@ -19,13 +19,7 @@ func ThingsIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 func ThingsShowHandler(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
-
-  // Due to how httprouter works, we need to forward to "new" from within the show route
-  if vars["id"] == "new" {
-    ThingsNewHandler(w,r)
-  } else {
-    fmt.Fprintf(w, "%s", vars)
-  }
+  fmt.Fprintf(w, "%s", vars)
 }
 
 func ThingsNewHandler(w http.ResponseWriter, r *http.Request) {
