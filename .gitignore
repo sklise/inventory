@@ -3,3 +3,5 @@
 *.db
 .bundle/
 .sass-cache/
+inventory
+inventory_migrations
