@@ -37,3 +37,10 @@ Inventory application for media.
 - [ ] View item
 - [ ] Edit item
 - [ ] Authentication
+
+
+#### gorilla/context
+
+This is for global variables passed between middlewares when using normal `http.HandleFunc` type methods
+
+http://www.gorillatoolkit.org/pkg/context

@@ -2,73 +2,96 @@ package main
 
 import (
   "fmt"
-  "github.com/julienschmidt/httprouter"
+  "github.com/codegangsta/negroni"
+  "github.com/gorilla/context"
+  "github.com/gorilla/mux"
+  "github.com/unrolled/render"
+  // "html/template"
   "log"
   "net/http"
   "time"
 )
 
-func HomeHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Println("GET /home")
-  fmt.Fprintf(w, "home")
+type Thing struct {
+  Id          int64
+  AuthorId    int64
+  PublisherId int64
+  Year        int64
+  CreatedAt   time.Time
+  UpdatedAt   time.Time
 }
 
-func ThingsIndexHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "All things")
+type Author struct {
+  Id            int64
+  CreatedAt     time.Time
+  UpdatedAt     time.Time
+  Name          string
 }
 
-func ThingsShowHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  vars := ps
-
-  // Due to how httprouter works, we need to forward to "new" from within the show route
-  if ps.ByName("id") == "new" {
-    ThingsNewHandler(w,r,ps)
-  } else {
-    fmt.Fprintf(w, "%s", vars)
-  }
-}
-
-func ThingsNewHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "new")
-}
-
-func ThingsCreateHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  vars := ps
-  fmt.Fprintf(w, "%s", vars)
-}
-
-func ThingsDeleteHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  vars := ps
-  fmt.Fprintf(w, "ID: %v", vars)
-}
-
-func ThingsUpdateHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  vars := ps
-  fmt.Fprintf(w, "%s", vars)
-}
-
-func loggingHandler(next http.Handler) http.Handler {
-  fn := func(w http.ResponseWriter, r *http.Request) {
-    t1 := time.Now()
-    next.ServeHTTP(w, r)
-    t2 := time.Now()
-    log.Printf("[%s] %q %v\n", r.Method, r.URL.String(), t2.Sub(t1))
-  }
-
-  return http.HandlerFunc(fn)
+type Publisher struct {
+  Id            int64
+  CreatedAt     time.Time
+  UpdatedAt     time.Time
+  Name          string
 }
 
 func main() {
-  r := httprouter.New()
 
-  r.GET("/", HomeHandler)
+  // Use negroni for middleware
+  ne := negroni.New(
+    negroni.NewRecovery(),
+    negroni.NewLogger(),
+    negroni.NewStatic(http.Dir("public")),
+  )
 
-  r.GET("/things", ThingsIndexHandler)
-  r.POST("/things", ThingsCreateHandler)
-  r.GET("/things/:id", ThingsShowHandler)
-  r.PUT("/things/:id", ThingsUpdateHandler)
-  r.DELETE("/things/:id", ThingsDeleteHandler)
+  // Use gorilla/mux for routing
+  ro := mux.NewRouter()
 
-  http.Handle("/", r)
+  // Set StrictSlash to allow /things/ to automatically redirect to /things
+  ro.StrictSlash(true)
+
+  // Use Render for template. Pass in path to templates folder
+  // as well as asset helper functions.
+  re := render.New(render.Options{
+    Layout: "layouts/layout",
+    Extensions: []string{".html"},
+  })
+
+  ne.UseHandler(ro)
+
+  ro.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+    re.HTML(w, 200, "index", nil)
+  }).Methods("Get")
+
+  ro.HandleFunc("/things", func(w http.ResponseWriter, r *http.Request) {
+    re.HTML(w, 200, "things/index", nil)
+  }).Methods("Get")
+
+  ro.HandleFunc("/things/new", func(w http.ResponseWriter, r *http.Request) {
+    re.HTML(w, 200, "things/new", nil)
+  }).Methods("Get")
+
+  ro.HandleFunc("/things", func(w http.ResponseWriter, r *http.Request) {
+    vars := context.Get(r, "params")
+    fmt.Fprintf(w, "%s", vars)
+  }).Methods("Post")
+
+  ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
+    vars := context.Get(r, "params")
+
+    fmt.Fprintf(w, "%s", vars)
+  }).Methods("Get")
+
+  ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
+    vars := context.Get(r, "params")
+    fmt.Fprintf(w, "%s", vars)
+  }).Methods("Put")
+
+  ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
+    vars := context.Get(r, "params")
+    fmt.Fprintf(w, "ID: %v", vars)
+  }).Methods("Delete")
+
+  http.Handle("/", ro)
   http.ListenAndServe(":8080", nil)
 }
