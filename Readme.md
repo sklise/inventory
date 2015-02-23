@@ -38,6 +38,10 @@ Inventory application for media.
 - [ ] Edit item
 - [ ] Authentication
 
+### Sources
+
+http://nicolasmerouze.com/build-web-framework-golang/
+https://github.com/runemadsen/ok-go
 
 #### gorilla/context
 

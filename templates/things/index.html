@@ -1,3 +1,9 @@
 <h1>All Things</h1>
 
 Hello
+
+{{ range . }}
+  <div class="thing">
+    {{.Title}}
+  </div>
+{{ end }}

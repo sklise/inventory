@@ -5,26 +5,23 @@ import (
   "github.com/codegangsta/negroni"
   "github.com/gorilla/context"
   "github.com/gorilla/mux"
+  _ "github.com/lib/pq"
+  "github.com/jinzhu/gorm"
   "github.com/unrolled/render"
   // "html/template"
-  "log"
+  // "log"
   "net/http"
   "time"
 )
 
 type Thing struct {
   Id          int64
-  AuthorId    int64
-  PublisherId int64
   Year        int64
-  CreatedAt   time.Time
-  UpdatedAt   time.Time
+  Title       string
 }
 
 type Author struct {
   Id            int64
-  CreatedAt     time.Time
-  UpdatedAt     time.Time
   Name          string
 }
 
@@ -36,7 +33,10 @@ type Publisher struct {
 }
 
 func main() {
-
+  db, err := gorm.Open("postgres", "dbname=inventory sslmode=disable")
+  if err != nil {
+    fmt.Printf("Error connecting to database: %v",err)
+  }
   // Use negroni for middleware
   ne := negroni.New(
     negroni.NewRecovery(),
@@ -64,7 +64,13 @@ func main() {
   }).Methods("Get")
 
   ro.HandleFunc("/things", func(w http.ResponseWriter, r *http.Request) {
-    re.HTML(w, 200, "things/index", nil)
+    authors := []Thing{}
+    db.Find(&authors)
+    fmt.Printf("%v", len(authors))
+    for i := 0; i < len(authors); i++ {
+      fmt.Printf("%v", authors[i])
+    }
+    re.HTML(w, 200, "things/index", authors)
   }).Methods("Get")
 
   ro.HandleFunc("/things/new", func(w http.ResponseWriter, r *http.Request) {
