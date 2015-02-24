@@ -11,6 +11,7 @@ import (
   // "html/template"
   // "log"
   "net/http"
+  "strings"
   "time"
 )
 
@@ -78,14 +79,31 @@ func main() {
   }).Methods("Get")
 
   ro.HandleFunc("/things", func(w http.ResponseWriter, r *http.Request) {
-    vars := context.Get(r, "params")
-    fmt.Fprintf(w, "%s", vars)
+    // Parse form values
+    err1 := r.ParseForm()
+    if err1 != nil {
+      fmt.Println("Cannot parse form")
+    }
+    data := r.PostForm
+
+    thing := Thing{
+      Title: strings.Join(data["title"], ""),
+    }
+
+    db.Create(&thing)
+    fmt.Fprintf(w, "%v", data["title"])
   }).Methods("Post")
 
   ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
-    vars := context.Get(r, "params")
+    vars := mux.Vars(r)
+    thing := Thing{}
+    db.Where("id = ?", vars["id"]).First(&thing)
 
-    fmt.Fprintf(w, "%s", vars)
+    if thing.Id == 0 {
+      re.HTML(w, 404, "404", "")
+    } else {
+      re.HTML(w, 200, "things/show", thing)
+    }
   }).Methods("Get")
 
   ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
