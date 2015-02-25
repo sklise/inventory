@@ -1,0 +1,9 @@
+<h1>Authors</h1>
+
+<ul>
+{{ range . }}
+  <li>
+    <a href="/authors/{{.Id}}">{{.Name}}</a>
+  </li>
+{{ end }}
+</ul>
