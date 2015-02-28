@@ -1,7 +1,12 @@
 <h1>New Thing</h1>
 
 <form method="post" action="/things">
-  <input type="text" name="title">
-  <input type="number" name="year">
+  <input type="text" name="title" placeholder="Title">
+  <input type="number" name="year" placeholder="Year">
+  <select name="author_id">
+    {{range .}}
+    <option value="{{.Id}}">{{.Name}}</option>
+    {{end}}
+  </select>
   <input type="submit">
 </form>

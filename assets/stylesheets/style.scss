@@ -1,0 +1,21 @@
+@import 'reset';
+
+// Fonts
+$main-font: 'Inconsolata','Helvetica Neue';
+
+$base-font-size: 0.9em;
+$color-background: #FDF088;
+$font-color: #2CA9F7;
+
+html {
+  background-color: $color-background;
+  font-family: $main-font;
+  font-size: 100%;
+}
+
+body {
+  color: $font-color;
+  font-size: $base-font-size;
+  margin: 1em auto;
+  width: 400px;
+}
