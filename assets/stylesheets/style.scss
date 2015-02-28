@@ -4,8 +4,9 @@
 $main-font: 'Inconsolata','Helvetica Neue';
 
 $base-font-size: 0.9rem;
-$color-background: #FDF088;
-$font-color: #2CA9F7;
+$color-background: #F4F6CF;
+$font-color: #0259E5;
+$link-color: #0259E5;
 
 html {
   background-color: $color-background;
@@ -13,19 +14,40 @@ html {
   font-size: 100%;
 }
 
+a {
+  color: $link-color;
+}
+
 body {
   color: $font-color;
   font-size: $base-font-size;
   margin: 1em auto;
-  width: 400px;
+  padding-left: 1em;
+  padding-right: 1em;
+  position: relative;
+  width: 700px;
 }
 
 h1,h2,h3,h4,h5,h6 {
-  margin-bottom: 0.25em;
-  margin-top: 0.25em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
 }
 
 h1 {
-  font-size: 1.2rem;
-  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+li {
+  &:before {
+    content: "–";
+    left: -1em;
+    position: absolute;
+  }
 }
