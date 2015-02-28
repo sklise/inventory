@@ -3,7 +3,7 @@
 // Fonts
 $main-font: 'Inconsolata','Helvetica Neue';
 
-$base-font-size: 0.9em;
+$base-font-size: 0.9rem;
 $color-background: #FDF088;
 $font-color: #2CA9F7;
 
@@ -18,4 +18,14 @@ body {
   font-size: $base-font-size;
   margin: 1em auto;
   width: 400px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  margin-bottom: 0.25em;
+  margin-top: 0.25em;
+}
+
+h1 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
 }
