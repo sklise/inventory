@@ -8,22 +8,33 @@ import (
   _ "github.com/lib/pq"
   "github.com/jinzhu/gorm"
   "github.com/unrolled/render"
-  // "html/template"
-  // "log"
   "net/http"
-  "strings"
+  "os"
+  "strconv"
   "time"
 )
+
+type Format struct {
+  Id          int64
+  Name        string
+  CreatedAt   time.Time
+  UpdatedAt   time.Time
+}
 
 type Thing struct {
   Id          int64
   Year        int64
   Title       string
+  AuthorId    int64
+  CreatedAt   time.Time
+  UpdatedAt   time.Time
 }
 
 type Author struct {
   Id            int64
   Name          string
+  CreatedAt   time.Time
+  UpdatedAt   time.Time
 }
 
 type Publisher struct {
@@ -31,6 +42,11 @@ type Publisher struct {
   CreatedAt     time.Time
   UpdatedAt     time.Time
   Name          string
+}
+
+type AuthorAndThings struct {
+  Author Author
+  Things []Thing
 }
 
 func main() {
@@ -75,7 +91,9 @@ func main() {
   }).Methods("Get")
 
   ro.HandleFunc("/things/new", func(w http.ResponseWriter, r *http.Request) {
-    re.HTML(w, 200, "things/new", nil)
+    authors := []Author{}
+    db.Find(&authors)
+    re.HTML(w, 200, "things/new", authors)
   }).Methods("Get")
 
   ro.HandleFunc("/things", func(w http.ResponseWriter, r *http.Request) {
@@ -84,16 +102,29 @@ func main() {
     if err1 != nil {
       fmt.Println("Cannot parse form")
     }
-    data := r.PostForm
+
+    title := r.FormValue("title")
+    year, _ := strconv.ParseInt(r.FormValue("year"), 10, 64)
+    author_id, _ := strconv.ParseInt(r.FormValue("author_id"), 10, 64)
 
     thing := Thing{
-      Title: strings.Join(data["title"], ""),
+      Title: title,
+      Year: year,
+      AuthorId: author_id,
     }
 
-    db.Create(&thing)
-    fmt.Fprintf(w, "%v", data["title"])
+    err := db.Create(&thing)
+    if err != nil {
+      re.HTML(w, 500, "error", err)
+      return
+    }
+
+    things := []Thing{}
+    db.Find(&things)
+    re.HTML(w, 200, "things/index", things)
   }).Methods("Post")
 
+  // Show Thing
   ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     thing := Thing{}
@@ -106,11 +137,13 @@ func main() {
     }
   }).Methods("Get")
 
+  // Modify Thing
   ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
     vars := context.Get(r, "params")
     fmt.Fprintf(w, "%s", vars)
   }).Methods("Put")
 
+  // Delete Thing
   ro.HandleFunc("/things/{id}", func(w http.ResponseWriter, r *http.Request) {
     vars := context.Get(r, "params")
     fmt.Fprintf(w, "ID: %v", vars)
@@ -151,13 +184,23 @@ func main() {
   ro.HandleFunc("/authors/{id}", func(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     author := Author{}
+    things := []Thing{}
+
     if db.Where("id = ?", vars["id"]).First(&author).RecordNotFound() {
       re.HTML(w, 404, "error", "404 Could not find requested author")
       return
     }
-    re.HTML(w, 200, "authors/show", author)
+
+    db.Model(&author).Related(&things)
+
+    data := AuthorAndThings {
+      Author: author,
+      Things: things,
+    }
+
+    re.HTML(w, 200, "authors/show", data)
   }).Methods("Get")
 
-  http.Handle("/", ro)
-  http.ListenAndServe(":8080", nil)
+  // Launch Negroni with all middleware and run on this port.
+  ne.Run(":" + os.Getenv("PORT"))
 }
