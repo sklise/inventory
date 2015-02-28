@@ -152,7 +152,7 @@ func main() {
   // Index for Authors
   ro.HandleFunc("/authors", func(w http.ResponseWriter, r *http.Request) {
     authors := []Author{}
-    db.Find(&authors)
+    db.Order("LOWER(name) asc").Find(&authors)
 
     re.HTML(w, 200, "authors/index", authors)
   }).Methods("Get")
@@ -191,7 +191,7 @@ func main() {
       return
     }
 
-    db.Model(&author).Related(&things)
+    db.Model(&author).Order("year desc").Related(&things)
 
     data := AuthorAndThings {
       Author: author,
