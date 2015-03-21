@@ -56,11 +56,24 @@ time, mark, audio, video {
 
 html {
   background-color: #F4F6CF;
-  font-family: "Inconsolata", "Helvetica Neue";
+  font-family: "Input Sans Narrow", "Inconsolata", "Helvetica Neue";
   font-size: 100%; }
 
 a {
-  color: #0259E5; }
+  color: #0259E5;
+  text-decoration: none;
+  background-color: rgba(254, 193, 0, 0);
+  background-image: -webkit-linear-gradient(rgba(254, 193, 0, 0) 35%, #FEC100 36%, #FEC100 65%, rgba(254, 193, 0, 0) 66%);
+  background-image: linear-gradient(rgba(254, 193, 0, 0) 35%, #FEC100 36%, #FEC100 65%, rgba(254, 193, 0, 0) 66%);
+  margin-left: -0.125em;
+  margin-right: -0.125em;
+  padding-left: 0.125em;
+  padding-right: 0.125em;
+  transition: all 0.3s ease; }
+  a:hover {
+    background-color: #fec100;
+    background-image: -webkit-linear-gradient(#fec100 35%, #FEC100 36%, #FEC100 65%, #fec100 66%);
+    background-image: linear-gradient(#fec100 35%, #FEC100 36%, #FEC100 65%, #fec100 66%); }
 
 body {
   color: #0259E5;

@@ -1,7 +1,8 @@
 @import 'reset';
+@import 'bourbon/bourbon';
 
 // Fonts
-$main-font: 'Inconsolata','Helvetica Neue';
+$main-font: 'Input Sans Narrow', 'Inconsolata','Helvetica Neue';
 
 $base-font-size: 0.9rem;
 $color-background: #F4F6CF;
@@ -16,6 +17,17 @@ html {
 
 a {
   color: $link-color;
+  text-decoration: none;
+  @include linear-gradient(rgba(254,193,0,0) 35%, #FEC100 36% , #FEC100 65% , rgba(254,193,0,0) 66%);
+  margin-left: -0.125em;
+  margin-right: -0.125em;
+  padding-left: 0.125em;
+  padding-right: 0.125em;
+  transition: all 0.3s ease;
+
+  &:hover {
+    @include linear-gradient(rgba(254,193,0,1) 35%, #FEC100 36% , #FEC100 65% , rgba(254,193,0,1) 66%);
+  }
 }
 
 body {
