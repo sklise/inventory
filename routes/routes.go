@@ -7,7 +7,6 @@ import (
 
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
 	"github.com/sklise/inventory/config"
 	"github.com/sklise/inventory/models"
 )
