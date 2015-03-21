@@ -21,7 +21,7 @@ type App struct {
 func newDB() *gorm.DB {
 	db, err := gorm.Open("postgres", "dbname=inventory sslmode=disable")
 
-	// Uncomment this to enable DB loggin
+	// Uncomment this to enable DB logging
 	//db.LogMode(true)
 
 	if err != nil {

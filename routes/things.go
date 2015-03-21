@@ -1,33 +1,31 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/sklise/inventory/models"
 )
 
 func ThingsIndex(w http.ResponseWriter, r *http.Request) {
 	things := []models.Thing{}
-
 	App.DB.Find(&things)
-	App.Render.HTML(w, 200, "things/index", things)
+	App.Render.HTML(w, http.StatusOK, "things/index", things)
 }
 
 func ThingsNew(w http.ResponseWriter, r *http.Request) {
 	authors := []models.Author{}
 	App.DB.Find(&authors)
-	App.Render.HTML(w, 200, "things/new", authors)
+	App.Render.HTML(w, http.StatusOK, "things/new", authors)
 }
 
 func ThingsCreate(w http.ResponseWriter, r *http.Request) {
 	// Parse form values
 	err1 := r.ParseForm()
 	if err1 != nil {
-		fmt.Println("Cannot parse form")
+		App.Render.JSON(w, http.StatusBadRequest, map[string]string{"error": "Cannot parse form"})
+		return
 	}
 
 	title := r.FormValue("title")
@@ -42,37 +40,60 @@ func ThingsCreate(w http.ResponseWriter, r *http.Request) {
 
 	err := App.DB.Create(&thing)
 	if err != nil {
-		App.Render.HTML(w, 500, "error", err)
+		App.Render.JSON(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	things := []models.Thing{}
-	App.DB.Find(&things)
-	App.Render.HTML(w, 200, "things/index", things)
+	App.Render.JSON(w, http.StatusOK, thing)
 }
 
 func ThingsShow(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
+	params := mux.Vars(r)
 	thing := models.Thing{}
-	App.DB.Where("id = ?", vars["id"]).First(&thing)
+	App.DB.Where("id = ?", params["id"]).First(&thing)
 
 	if thing.Id == 0 {
 		App.Render.HTML(w, 404, "error", "404 Could not find requested thing")
 	} else {
-		App.Render.HTML(w, 200, "things/show", thing)
+		App.Render.HTML(w, http.StatusOK, "things/show", thing)
 	}
 }
 
 func ThingsUpdate(w http.ResponseWriter, r *http.Request) {
-	vars := context.Get(r, "params")
-	fmt.Fprintf(w, "%s", vars)
+	params := mux.Vars(r)
+	// Parse form values
+	err1 := r.ParseForm()
+	if err1 != nil {
+		App.Render.JSON(w, http.StatusBadRequest, map[string]string{"error": "Cannot parse form"})
+		return
+	}
+
+	thing := models.Thing{}
+	App.DB.Where("id = ?", params["id"]).First(&thing)
+
+	if thing.Id == 0 {
+		App.Render.JSON(w, 404, map[string]string{"error": "404 Could not find requested thing"})
+		return
+	} else {
+		title := r.FormValue("title")
+		year, _ := strconv.ParseInt(r.FormValue("year"), 10, 64)
+		author_id, _ := strconv.ParseInt(r.FormValue("author_id"), 10, 64)
+
+		thing.Title = title
+		thing.Year = year
+		thing.AuthorId = author_id
+		App.DB.Save(&thing)
+
+		App.Render.JSON(w, http.StatusOK, thing)
+		return
+	}
 }
 
 func ThingsDestroy(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
+	params := mux.Vars(r)
 	thing := models.Thing{}
 
-	App.DB.Where("id = ?", vars["id"]).First(&thing)
+	App.DB.Where("id = ?", params["id"]).First(&thing)
 
 	if thing.Id == 0 {
 		App.Render.JSON(w, http.StatusNotFound, map[string]string{"error": "content not found"})
