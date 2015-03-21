@@ -31,6 +31,8 @@ func main() {
 	App.Router.HandleFunc("/authors/new", routes.AuthorsNew).Methods("Get")
 	App.Router.HandleFunc("/authors", routes.AuthorsCreate).Methods("Post")
 	App.Router.HandleFunc("/authors/{id}", routes.AuthorsShow).Methods("Get")
+	App.Router.HandleFunc("/authors/{id}", routes.AuthorsUpdate).Methods("Put")
+	App.Router.HandleFunc("/authors/{id}", routes.AuthorsDestroy).Methods("Delete")
 
 	// Launch Negroni with all middleware and run on this port.
 	App.Negroni.Run(":" + os.Getenv("PORT"))

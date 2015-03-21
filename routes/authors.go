@@ -58,3 +58,6 @@ func AuthorsShow(w http.ResponseWriter, r *http.Request) {
 
 	App.Render.HTML(w, 200, "authors/show", data)
 }
+
+func AuthorsUpdate(w http.ResponseWriter, r *http.Request)  {}
+func AuthorsDestroy(w http.ResponseWriter, r *http.Request) {}
