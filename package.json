@@ -1,0 +1,16 @@
+{
+  "name": "inventory",
+  "version": "0.0.0",
+  "description": "An app I re-write every time I want to learn a new web language.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stevenklise/inventory.git"
+  },
+  "dependencies": {
+    "react": "^0.12.2",
+    "flux": "^2.0.1"
+  }
+}
